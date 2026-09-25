@@ -1,5 +1,7 @@
 #!/bin/sh
 
+DOTFILES=$(realpath $0 | xargs dirname)
+
 echo "Setting up dotfiles..."
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -14,4 +16,8 @@ fi
 
 brew update
 brew bundle --file=./Brewfile
+
+ln -sf "$DOTFILES/.gitconfig" "$HOME/.gitconfig"
+ln -sf "$DOTFILES/.vimrc" "$HOME/.vimrc"
+ln -sf "$DOTFILES/.zshrc" "$HOME/.zshrc"
 

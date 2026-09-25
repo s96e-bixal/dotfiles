@@ -1,0 +1,10 @@
+[user]
+    email = justice.suh@bixal.com
+    name = Justice Suh
+
+[init]
+    defaultBranch = main
+
+[core]
+    editor = vim
+
