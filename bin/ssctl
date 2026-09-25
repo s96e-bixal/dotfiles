@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+
+def xml_to_dict(xml):
+    return {
+        attr.get('name'): attr.text
+        for attr in xml.findall('attribute')
+    }
+
+
+class SelfService:
+    def __init__(self):
+        self.path = Path.home() / 'Library/Application Support/osx-self-service.Self-Service.resources/CocoaAppCD.storedata'
+
+    def parse(self):
+        self.catalog = {}
+        root = ET.parse(self.path).getroot()
+        for obj in root.findall('object'):
+            if obj.get('type') == 'SSCATEGORY':
+                continue
+            data = xml_to_dict(obj)
+            self.catalog[data['name']] = data['id']
+        print(self.catalog)
+
+
+
+def main():
+    ss = SelfService()
+    ss.parse()
+
+
+if __name__ == '__main__':
+    main()
