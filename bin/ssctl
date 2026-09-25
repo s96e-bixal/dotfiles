@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import xml.etree.ElementTree as ET
+from argparse import ArgumentParser
 from pathlib import Path
 
 
@@ -13,6 +14,7 @@ def xml_to_dict(xml):
 class SelfService:
     def __init__(self):
         self.path = Path.home() / 'Library/Application Support/osx-self-service.Self-Service.resources/CocoaAppCD.storedata'
+        self.parse()
 
     def parse(self):
         self.catalog = {}
@@ -22,13 +24,24 @@ class SelfService:
                 continue
             data = xml_to_dict(obj)
             self.catalog[data['name']] = data['id']
-        print(self.catalog)
+
+    def list(self):
+        padding = max(len(str(key)) for key in self.catalog)
+        for key in sorted(self.catalog, key=str.casefold):
+            print(f"{key:<{padding}} | {self.catalog[key]}")
 
 
 
 def main():
+    parser = ArgumentParser()
+    parser.add_argument('command')
+    args = parser.parse_args()
+    command = args.command
+
     ss = SelfService()
-    ss.parse()
+
+    if command == 'list':
+        ss.list()
 
 
 if __name__ == '__main__':
