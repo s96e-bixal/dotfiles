@@ -22,7 +22,7 @@ class SelfService:
         self.catalog = {}
         root = ET.parse(self.path).getroot()
         for obj in root.findall('object'):
-            if obj.get('type') == 'SSCATEGORY':
+            if obj.get('type') != 'SSPOLICY':
                 continue
             data = xml_to_dict(obj)
 
