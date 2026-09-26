@@ -1,2 +1,5 @@
 brew "git"
 brew "python"
+cask "bitwarden"
+cask "okta-verify"
+cask "zoom"

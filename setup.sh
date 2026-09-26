@@ -42,3 +42,5 @@ ssctl install "Microsoft Word"
 ssctl install "Install/Update Microsoft Office Suite"
 
 open -a "Self Service+"
+sleep 4
+osascript -e 'quit app "Self Service+"'
