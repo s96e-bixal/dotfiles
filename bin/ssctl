@@ -23,6 +23,11 @@ class SelfService:
             if obj.get('type') == 'SSCATEGORY':
                 continue
             data = xml_to_dict(obj)
+
+            # skip duplicate names if initial policy is already installed
+            if data['name'] in self.catalog and self.catalog[data['name']]['installed']:
+                continue
+
             self.catalog[data['name']] = {
                 'id': data['id'],
                 'installed': False if data['installstatus'] == '0' else True,
