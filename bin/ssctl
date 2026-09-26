@@ -23,25 +23,40 @@ class SelfService:
             if obj.get('type') == 'SSCATEGORY':
                 continue
             data = xml_to_dict(obj)
-            self.catalog[data['name']] = data['id']
+            self.catalog[data['name']] = {
+                'id': data['id'],
+                'installed': False if data['installstatus'] == '0' else True,
+            }
 
-    def list(self):
-        padding = max(len(str(key)) for key in self.catalog)
+    def list_policies(self):
+        padding = max(len(str(value['id'])) for value in self.catalog.values())
         for key in sorted(self.catalog, key=str.casefold):
-            print(f"{key:<{padding}} | {self.catalog[key]}")
+            print(f"{self.catalog[key]['id']:<{padding}} | {key}")
 
+    def display_policy(self, name):
+        policy = self.catalog.get(name, None)
+        if policy is None:
+            return
+        print(f"{'Policy ID:':<10} {policy['id']}")
+        print(f"{'Name:':<10} {name}")
+        print(f"{'Installed:':<10} {policy['installed']}")
 
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('command')
+    subparsers = parser.add_subparsers(dest='command', required=True)
+    subparsers.add_parser('list')
+    policy_parser = subparsers.add_parser('policy')
+    policy_parser.add_argument('name')
     args = parser.parse_args()
-    command = args.command
 
     ss = SelfService()
 
-    if command == 'list':
-        ss.list()
+    match args.command:
+        case 'list':
+            ss.list_policies()
+        case 'policy':
+            ss.display_policy(args.name)
 
 
 if __name__ == '__main__':
