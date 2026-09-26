@@ -2,6 +2,10 @@
 
 DOTFILES=$(realpath $0 | xargs dirname)
 
+ssctl() {
+    "$DOTFILES/bin/ssctl" "$@"
+}
+
 echo "Setting up dotfiles..."
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -22,3 +26,22 @@ ln -sf "$DOTFILES/.vimrc" "$HOME/.vimrc"
 ln -sf "$DOTFILES/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
 ln -sf "$DOTFILES/env.zsh" "$HOME/.oh-my-zsh/custom/env.zsh"
+
+osascript -e 'quit app "Self Service+"'
+
+ssctl install "Firefox"
+ssctl install "Google Chrome"
+ssctl install "Slack"
+ssctl install "Zoom"
+ssctl install "VSCodium (Visual Studio Codium)"
+ssctl install "Bitwarden"
+ssctl install "Okta Verify"
+ssctl install "Microsoft Excel"
+ssctl install "Microsoft OneDrive"
+ssctl install "Microsoft Outlook"
+ssctl install "Microsoft Powerpoint"
+ssctl install "Microsoft Teams"
+ssctl install "Microsoft Word"
+ssctl install "Install/Update Microsoft Office Suite"
+
+open -a "Self Service+"
