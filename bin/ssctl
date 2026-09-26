@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import subprocess
+import sys
 import xml.etree.ElementTree as ET
 from argparse import ArgumentParser
 from pathlib import Path
@@ -46,6 +48,15 @@ class SelfService:
         print(f"{'Name:':<10} {name}")
         print(f"{'Installed:':<10} {policy['installed']}")
 
+    def install_policy(self, name):
+        policy = self.catalog.get(name, None)
+        if policy is None or policy['installed'] is True:
+            return
+        try:
+            subprocess.run(['sudo', 'jamf', 'policy', '-id', policy['id']], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to install {name} (exit code {e.returncode})", file=sys.stderr)
+
 
 def main():
     parser = ArgumentParser()
@@ -53,6 +64,8 @@ def main():
     subparsers.add_parser('list')
     policy_parser = subparsers.add_parser('policy')
     policy_parser.add_argument('name')
+    install_parser = subparsers.add_parser('install')
+    install_parser.add_argument('name')
     args = parser.parse_args()
 
     ss = SelfService()
@@ -62,6 +75,8 @@ def main():
             ss.list_policies()
         case 'policy':
             ss.display_policy(args.name)
+        case 'install':
+            ss.install_policy(args.name)
 
 
 if __name__ == '__main__':
