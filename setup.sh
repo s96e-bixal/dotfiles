@@ -2,10 +2,6 @@
 
 DOTFILES=$(realpath $0 | xargs dirname)
 
-ssctl() {
-    "$DOTFILES/bin/ssctl" "$@"
-}
-
 echo "Setting up dotfiles..."
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -28,16 +24,8 @@ ln -sf "$DOTFILES/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
 ln -sf "$DOTFILES/env.zsh" "$HOME/.oh-my-zsh/custom/env.zsh"
 ln -sf "$DOTFILES/vscodium/settings.json" "$HOME/Library/Application Support/VSCodium/User/settings.json"
 
+mkdir -p "$HOME/Code"
+
 "$DOTFILES/bin/ssctl" install --file=./Policyfile
 
-dockutil --no-restart --remove all
-dockutil --no-restart --add "/Applications/Firefox.app" --section apps
-dockutil --no-restart --add "/Applications/Microsoft Outlook.app" --section apps
-dockutil --no-restart --add "/Applications/Microsoft Teams.app" --section apps
-dockutil --no-restart --add "/Applications/Slack.app" --section apps
-dockutil --no-restart --add "/Applications/zoom.us.app" --section apps
-dockutil --no-restart --add "/System/Applications/Utilities/Terminal.app" --section apps
-dockutil --no-restart --add "/Applications/VSCodium" --section apps
-dockutil --no-restart --add "/Applications/Bixal App Store" --section apps
-dockutil --no-restart --add "/Applications/System Settings.app" --section apps
-killall Dock
+. dock.sh
