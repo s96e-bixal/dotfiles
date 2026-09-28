@@ -28,23 +28,7 @@ ln -sf "$DOTFILES/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
 ln -sf "$DOTFILES/env.zsh" "$HOME/.oh-my-zsh/custom/env.zsh"
 ln -sf "$DOTFILES/vscodium/settings.json" "$HOME/Library/Application Support/VSCodium/User/settings.json"
 
-osascript -e 'quit app "Self Service+"'
-
-ssctl install "Firefox"
-ssctl install "Google Chrome"
-ssctl install "Slack"
-ssctl install "VSCodium (Visual Studio Codium)"
-ssctl install "Microsoft Excel"
-ssctl install "Microsoft OneDrive"
-ssctl install "Microsoft Outlook"
-ssctl install "Microsoft Powerpoint"
-ssctl install "Microsoft Teams"
-ssctl install "Microsoft Word"
-ssctl install "Install/Update Microsoft Office Suite"
-
-open -a "Self Service+"
-sleep 4
-osascript -e 'quit app "Self Service+"'
+"$DOTFILES/bin/ssctl" install --file=./Policyfile
 
 dockutil --no-restart --remove all
 dockutil --no-restart --add "/Applications/Firefox.app" --section apps

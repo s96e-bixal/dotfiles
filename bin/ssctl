@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import subprocess
 import sys
+import time
 import xml.etree.ElementTree as ET
 from argparse import ArgumentParser
 from pathlib import Path
@@ -57,6 +58,24 @@ class SelfService:
         except subprocess.CalledProcessError as e:
             print(f"Failed to install {name} (exit code {e.returncode})", file=sys.stderr)
 
+    def install_policy_file(self, filename):
+        with open(Path.cwd() / filename, 'r') as f:
+            policies = [line.strip() for line in f.readlines()]
+        for policy in policies:
+            self.install_policy(policy)
+
+    def open(self):
+        try:
+            subprocess.run(['open', '-gj', '-a', "Self Service+"], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to open Self Service+ (exit code {e.returncode})", file=sys.stderr)
+
+    def quit(self):
+        try:
+            subprocess.run('osascript -e \'quit app "Self Service+"\'', check=True, shell=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to quit Self Service+ (exit code {e.returncode})", file=sys.stderr)
+
 
 def main():
     parser = ArgumentParser()
@@ -65,7 +84,8 @@ def main():
     policy_parser = subparsers.add_parser('policy')
     policy_parser.add_argument('name')
     install_parser = subparsers.add_parser('install')
-    install_parser.add_argument('name')
+    install_parser.add_argument('name', nargs='?')
+    install_parser.add_argument('--file', '-f', dest='filename')
     args = parser.parse_args()
 
     ss = SelfService()
@@ -76,7 +96,19 @@ def main():
         case 'policy':
             ss.display_policy(args.name)
         case 'install':
-            ss.install_policy(args.name)
+            name, filename = args.name, args.filename
+            if not name and not filename:
+                install_parser.error('specify either name or --file')
+            elif name and filename:
+                install_parser.error('the following arguments are required: name')
+            elif name:
+                ss.install_policy(name)
+            else:
+                ss.quit()
+                ss.install_policy_file(filename)
+                ss.open()
+                time.sleep(4)
+                ss.quit()
 
 
 if __name__ == '__main__':
