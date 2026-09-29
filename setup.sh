@@ -29,3 +29,5 @@ mkdir -p "$HOME/Code"
 "$DOTFILES/bin/ssctl" install --file=./Policyfile
 
 . dock.sh
+
+. catppuccin.sh
