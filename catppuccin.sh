@@ -16,4 +16,9 @@ defaults write com.apple.Terminal "Default Window Settings" -string "$CAPITALIZE
 defaults write com.apple.Terminal "Startup Window Settings" -string "$CAPITALIZED"
 rm $TERMINAL
 
+# set up vscodium extension
+curl -Lo extension.vsix https://github.com/catppuccin/vscode/releases/download/catppuccin-vsc-v3.19.0/catppuccin-vsc-3.19.0.vsix
+/Applications/VSCodium/Contents/Resources/app/bin/codium --install-extension extension.vsix
+rm extension.vsix
+
 echo "\033[33mRestart Terminal.app to load new profile.\033[0m"
