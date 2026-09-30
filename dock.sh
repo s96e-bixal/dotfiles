@@ -10,4 +10,7 @@ dockutil --no-restart --add "/System/Applications/Utilities/Terminal.app" --sect
 dockutil --no-restart --add "/Applications/VSCodium" --section apps
 dockutil --no-restart --add "/Applications/Bixal App Store" --section apps
 dockutil --no-restart --add "/System/Applications/System Settings.app" --section apps
+
+defaults write com.apple.dock show-recents -bool false
+
 killall Dock
