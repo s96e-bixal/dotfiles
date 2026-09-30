@@ -30,4 +30,4 @@ mkdir -p "$HOME/Code"
 
 . dock.sh
 
-. catppuccin.sh
+. monokai.sh
